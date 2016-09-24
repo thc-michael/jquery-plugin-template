@@ -17,6 +17,7 @@
 
 		$.extend(Plugin.prototype,{
 			init: function(){
+				console.log('public');
 				privateMethod();
 			}
 		});
