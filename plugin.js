@@ -4,8 +4,8 @@
 
 		var pluginName = 'defaultPluginName';
 		var defaults = {
-            propertyName: 'value'
-        };
+			propertyName: 'value'
+		};
 
 		function Plugin(element, options){
 			this.$element = $(element);
@@ -17,9 +17,13 @@
 
 		$.extend(Plugin.prototype,{
 			init: function(){
-                console.log('init');
+				privateMethod();
 			}
 		});
+
+		function privateMethod(){
+			console.log('private');
+		}
 
 		$.fn[pluginName] = function(options){
 			return this.each(function(){
