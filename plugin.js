@@ -1,37 +1,36 @@
 ;(function($, window, document, undefined){
 
-	"use strict";
+	var pluginName = 'defaultPluginName';
+	var dataKey = "plugin_" + pluginName;
 
-		var pluginName = 'defaultPluginName';
-		var defaults = {
+	var Plugin = function(element, options) {
+		this.$element = $(element);
+		this._name = pluginName;
+
+		this.settings = {
 			propertyName: 'value'
 		};
 
-		function Plugin(element, options){
-			this.$element = $(element);
-			this.settings = $.extend({}, defaults, options, this.$element.data());
-			this._defaults = defaults;
-			this._name = pluginName;
-			this.init();
-		}
+		this.init(options);
+	};
 
-		$.extend(Plugin.prototype,{
-			init: function(){
-				console.log('public');
-				privateMethod();
+	Plugin.prototype = {
+		init: function(options) {
+			this.settings = $.extend(true, this.settings, this.$element.data(), options);
+		}
+	};
+
+	$.fn[pluginName] = function (options) {
+		var plugin = this.data(dataKey);
+		if (plugin instanceof Plugin) {
+			if (typeof options !== 'undefined') {
+				plugin.init(options);
 			}
-		});
-
-		function privateMethod(){
-			console.log('private');
+		} else {
+			plugin = new Plugin(this, options);
+			this.data(dataKey, plugin);
 		}
+		return plugin;
+	};
 
-		$.fn[pluginName] = function(options){
-			return this.each(function(){
-				if(!$.data(this, "plugin_" + pluginName)){
-					$.data(this, "plugin_" + pluginName, new Plugin(this, options));
-				}
-			});
-		};
-
-})(jQuery, window, document);
+}(jQuery, window, document));
